@@ -1,0 +1,77 @@
+image: java:8-jdk
+
+variables:
+  GRADLE_OPTS: "-Dorg.gradle.daemon=false"
+
+before_script:
+  - export GRADLE_USER_HOME=`pwd`/.gradle
+
+stages:
+ - build
+ - test
+ - systemTest
+ - deploy
+ - postDeploy
+
+.base job template:
+  except:
+    - tags
+
+Build:
+  extends: .base job template
+  stage: build
+  script: ./gradlew --build-cache assemble -s
+  artifacts:
+    paths:
+      - build/libs/*.jar
+  cache:
+    key: "$CI_COMMIT_REF_NAME"
+    policy: push
+    paths:
+      - .gradle
+      - build
+
+Build with latest Gradle:
+  extends: .base job template
+  image: gradle:latest
+  stage: build
+  script: gradle assemble
+  allow_failure: true
+
+Test:
+  extends: .base job template
+  stage: test
+  script:
+    - ./gradlew check jacocoTestReport
+    - bash <(curl -s https://codecov.io/bash)
+  artifacts:
+    reports:
+      junit: build/test-results/**/TEST-*.xml
+  cache:
+    key: "$CI_COMMIT_REF_NAME"
+    policy: pull
+    paths:
+      - .gradle
+      - build
+
+.deploy template:
+  stage: deploy
+  when: manual
+  only:
+    - /^release/.*$/
+  cache:
+    key: "$CI_COMMIT_REF_NAME"
+    policy: pull
+    paths:
+      - .gradle
+      - subprojects/**/build
+
+.Deploy to plugin portal:
+  extends: .deploy template
+  script: ./gradlew publishPlugins -Pgradle.publish.key="$PLUGIN_PORTAL_KEY" -Pgradle.publish.secret="$PLUGIN_PORTAL_SECRET" -s
+
+.Deploy to Bintray:
+  extends: .deploy template
+  script:
+    - ./gradlew generatePomFileForMavenJavaPublication sourcesJar javadocJar
+    - ./gradlew bintrayUpload
