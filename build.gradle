@@ -107,6 +107,24 @@ task createTestkitFiles {
 test.dependsOn createTestkitFiles
 
 
+pluginBundle {
+    website = '$vcsUrl'
+    vcsUrl = '$vcsUrl'
+    tags = ['mermaid', 'graph', 'generation', 'dependency graph']
+}
+
+gradlePlugin {
+    plugins {
+        mermaid {
+            id = 'org.zkovari.mermaid'
+            displayName = 'Mermaid diagram generation plugin'
+            description = project.description
+            implementationClass = 'org.zkovari.mermaid.api.MermaidGenerationPlugin'
+        }
+    }
+}
+
+
 task sourcesJar(type: Jar) {
     from sourceSets.main.allJava
     archiveClassifier = 'sources'
