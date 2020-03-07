@@ -91,6 +91,22 @@ test {
 }
 
 
+task createTestkitFiles {
+    def outputDir = file("$buildDir/testkit")
+    
+    outputs.dir outputDir
+
+    doLast {
+        outputDir.mkdirs()
+        String jacocoPath = configurations.jacocoRuntime.asPath.replace('\\', '/')
+        
+        file("$outputDir/testkit-gradle.properties").text = "org.gradle.jvmargs=-javaagent:${jacocoPath}=destfile=${buildDir.path.replace('\\', '/')}/jacoco/jacocoTest.exec"
+    }
+}
+
+test.dependsOn createTestkitFiles
+
+
 task sourcesJar(type: Jar) {
     from sourceSets.main.allJava
     archiveClassifier = 'sources'
