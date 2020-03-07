@@ -41,6 +41,7 @@ Build with latest Gradle:
 Test:
   extends: .base job template
   stage: test
+  needs: [Build]
   script:
     - ./gradlew check jacocoTestReport
     - bash <(curl -s https://codecov.io/bash)
