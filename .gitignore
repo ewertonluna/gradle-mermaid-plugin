@@ -1,4 +1,4 @@
-
+src/main/generated/*
 # sphinx doc
 _build
 docs/_themes/sphinx_rtd_theme
