@@ -101,13 +101,6 @@ IntegTest Gradle 6:
   variables:
     GRADLE_VERSION_FOR_SYSTEM_TESTS: "6.0"
 
-IntegTest Gradle latest:
-  extends:
-    - .integTest job template
-    - .latest gradle job template
-  script:
-    - gradle test --tests *FunctionalTest*  
-
 .deploy template:
   stage: deploy
   when: manual
