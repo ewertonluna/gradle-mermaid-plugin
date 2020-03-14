@@ -2,6 +2,7 @@ package org.zkovari.mermaid.internal;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.Collection;
 
 import org.gradle.api.GradleException;
@@ -14,7 +15,7 @@ public class GitLabMermaidPostGenerator implements MermaidPostGenerator {
     public void generate(Project project, Collection<DependencyNode> rootNodes) {
         try {
             Files.copy(project.getBuildDir().toPath().resolve("graph.md"),
-                    project.getRootDir().toPath().resolve("DEPENDENCY-GRAPH.md"));
+                    project.getRootDir().toPath().resolve("DEPENDENCY-GRAPH.md"), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException ex) {
             throw new GradleException("Could not copy file", ex);
         }
