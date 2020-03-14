@@ -43,7 +43,7 @@ stages:
 .integTest job template:
   extends: .test job template
   stage: integTest
-  needs: [Test]
+  needs: [Build]
   script:
     - ./gradlew test --tests *FunctionalTest*
 
