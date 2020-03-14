@@ -1,0 +1,4 @@
+rootProject.name = 'gradle-mermaid-plugin-example-multi-project'
+include 'project-a'
+include 'project-b'
+include 'project-c'

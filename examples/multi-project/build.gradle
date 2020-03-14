@@ -1,0 +1,20 @@
+buildscript {
+    repositories {
+        mavenLocal()
+    }
+
+    dependencies {
+        classpath 'org.zkovari.mermaid:gradle-mermaid-plugin:0.+'
+    }
+}
+
+apply plugin: "org.zkovari.mermaid.ext.gitlab"
+
+subprojects {
+    
+    apply plugin: 'java-library'
+    
+    repositories {
+        mavenCentral()
+    }
+}
