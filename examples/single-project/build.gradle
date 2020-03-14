@@ -1,0 +1,31 @@
+buildscript {
+    repositories {
+        mavenLocal()
+    }
+
+    dependencies {
+        classpath 'org.zkovari.mermaid:gradle-mermaid-plugin:0.+'
+    }
+}
+
+plugins {
+    id 'java-library'
+    id 'org.springframework.boot' version '2.2.0.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+}
+
+apply plugin: "org.zkovari.mermaid.ext.gitlab"
+
+repositories {
+    mavenCentral()
+}
+
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'io.micrometer:micrometer-registry-prometheus'
+    
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.assertj:assertj-core:3.15.0'
+}

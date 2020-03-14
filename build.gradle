@@ -125,6 +125,12 @@ gradlePlugin {
             description = project.description
             implementationClass = 'org.zkovari.mermaid.api.MermaidGenerationPlugin'
         }
+        mermaid_gitlab {
+            id = 'org.zkovari.mermaid.ext.gitlab'
+            displayName = 'Mermaid diagram generation plugin. GitLab extension'
+            description = "${project.description}. GitLab extension."
+            implementationClass = 'org.zkovari.mermaid.api.GitLabMermaidGenerationPlugin'
+        }
     }
 }
 

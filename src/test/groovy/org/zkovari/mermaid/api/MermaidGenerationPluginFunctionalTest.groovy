@@ -107,6 +107,33 @@ graph TD;
         assert actualLines == expectedLines
     }
 
+    def "run generateMermaidDependenciesDiagram on single project when gitlab extension is applied"() {
+        given:
+        setUpSingleProject()
+        rootProjectBuildFile << """
+            dependencies {
+                compile 'junit:junit:4.12'
+            }
+        """
+
+        List<String> expectedLines = """```mermaid
+graph TD;
+  test-project-->junit;
+  junit-->hamcrest-core;
+```
+""".readLines()
+
+        when:
+        BuildResult result = build('generateMermaidDependenciesDiagram')
+
+        then:
+        assert result.task(":generateMermaidDependenciesDiagram").outcome == TaskOutcome.SUCCESS
+        File diagramFile = new File(testProjectDir.root, "build/graph.md")
+        assert diagramFile.exists()
+        List<String> actualLines = diagramFile.readLines()
+        assert actualLines == expectedLines
+    }
+
     def "run generateMermaidDependenciesDiagram on multi project"() {
         given:
         setUpMultiProject()

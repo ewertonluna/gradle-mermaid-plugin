@@ -1,5 +1,8 @@
 image: java:8-jdk
 
+include:
+  - template: Code-Quality.gitlab-ci.yml
+
 variables:
   GRADLE_OPTS: "-Dorg.gradle.daemon=false"
 
@@ -17,30 +20,37 @@ stages:
   except:
     - tags
 
-Build:
+.build job template:
   extends: .base job template
   stage: build
-  script: ./gradlew --build-cache assemble -s
   artifacts:
     paths:
-      - build/libs/*.jar
-  cache:
-    key: "$CI_COMMIT_REF_NAME"
-    policy: push
-    paths:
       - .gradle
-      - build
+      - build/
 
-Build with latest Gradle:
-  extends: .base job template
-  image: gradle:latest
-  stage: build
-  script: gradle assemble
-  allow_failure: true
-
-Test:
+.test job template:
   extends: .base job template
   stage: test
+  artifacts:
+    reports:
+      junit: build/test-results/**/TEST-*.xml
+
+.latest gradle job template:
+  image: gradle:latest
+  allow_failure: true
+
+Build:
+  extends: .build job template
+  script: ./gradlew assemble -s
+
+Build with latest Gradle:
+  extends:
+   - .build job template
+   - .latest gradle job template
+  script: gradle assemble -s
+
+Test:
+  extends: .test job template
   needs: [Build]
   script:
     - ./gradlew check jacocoTestReport
@@ -48,12 +58,20 @@ Test:
   artifacts:
     reports:
       junit: build/test-results/**/TEST-*.xml
-  cache:
-    key: "$CI_COMMIT_REF_NAME"
-    policy: pull
-    paths:
-      - .gradle
-      - build
+
+Test with latest Gradle:
+  extends:
+   - .test job template
+   - .latest gradle job template
+  needs: [Build with latest Gradle]
+  script:
+    - gradle check
+  artifacts:
+    reports:
+      junit: build/test-results/**/TEST-*.xml
+
+code_quality:
+  needs: []
 
 .deploy template:
   stage: deploy
