@@ -21,6 +21,8 @@ class MermaidGenerationPluginFunctionalTest extends Specification {
     File propertiesFile
     File rootProjectBuildFile
 
+    String gradleVersion
+
     def setup() {
         File testKitGradlePropertiesResource = new File(
                 getClass().getClassLoader().getResource("testkit-gradle.properties").toURI())
@@ -31,6 +33,8 @@ class MermaidGenerationPluginFunctionalTest extends Specification {
         rootProjectBuildFile = testProjectDir.newFile('build.gradle')
 
         propertiesFile << testKitGradleProperties
+
+        gradleVersion = System.getenv('GRADLE_VERSION_FOR_SYSTEM_TESTS')
     }
 
     def setUpSingleProject() {
@@ -72,12 +76,16 @@ include 'project-b'
         childProjectBBuildFile = testProjectDir.newFile('project-b/build.gradle')
     }
 
-    BuildResult build(String command) {
-        return GradleRunner.create()
+    def BuildResult build(String command) {
+        def gradleRunner = GradleRunner.create()
                 .withProjectDir(testProjectDir.root)
                 .withPluginClasspath()
                 .withArguments(command, "-s")
-                .build()
+
+        if (gradleVersion) {
+            gradleRunner.withGradleVersion(gradleVersion)
+        }
+        return gradleRunner.build()
     }
 
     def "run generateMermaidDependenciesDiagram on single project"() {

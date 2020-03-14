@@ -12,6 +12,7 @@ before_script:
 stages:
  - build
  - test
+ - integTest
  - systemTest
  - deploy
  - postDeploy
@@ -39,14 +40,21 @@ stages:
   image: gradle:latest
   allow_failure: true
 
+.integTest job template:
+  extends: .test job template
+  stage: integTest
+  needs: [Test]
+  script:
+    - ./gradlew test --tests *FunctionalTest*
+
 Build:
   extends: .build job template
   script: ./gradlew assemble -s
 
 Build with latest Gradle:
   extends:
-   - .build job template
-   - .latest gradle job template
+    - .build job template
+    - .latest gradle job template
   script: gradle assemble -s
 
 Test:
@@ -72,6 +80,33 @@ Test with latest Gradle:
 
 code_quality:
   needs: []
+
+IntegTest Gradle 3:
+  extends: .integTest job template
+  variables:
+    GRADLE_VERSION_FOR_SYSTEM_TESTS: "3.0"
+
+IntegTest Gradle 4:
+  extends: .integTest job template
+  variables:
+    GRADLE_VERSION_FOR_SYSTEM_TESTS: "4.0"
+
+IntegTest Gradle 5:
+  extends: .integTest job template
+  variables:
+    GRADLE_VERSION_FOR_SYSTEM_TESTS: "5.0"
+
+IntegTest Gradle 6:
+  extends: .integTest job template
+  variables:
+    GRADLE_VERSION_FOR_SYSTEM_TESTS: "6.0"
+
+IntegTest Gradle latest:
+  extends:
+    - .integTest job template
+    - .latest gradle job template
+  script:
+    - gradle test --tests *FunctionalTest*  
 
 .deploy template:
   stage: deploy
