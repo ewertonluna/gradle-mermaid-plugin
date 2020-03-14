@@ -7,10 +7,12 @@ import org.zkovari.mermaid.internal.MermaidDiagramGenerator;
 
 public class MermaidGenerationPlugin implements Plugin<Project> {
 
+    public static final String GENERATE_MERMAID_DEPENDENCIES_DIAGRAM_TASK_NAME = "generateMermaidDependenciesDiagram";
+
     @Override
     public void apply(Project project) {
         GenerateMermaidDependenciesDiagram generateDependencyDiagramsTask = project.getTasks()
-                .create("generateMermaidDependenciesDiagram", GenerateMermaidDependenciesDiagram.class);
+                .create(GENERATE_MERMAID_DEPENDENCIES_DIAGRAM_TASK_NAME, GenerateMermaidDependenciesDiagram.class);
         generateDependencyDiagramsTask.setConfiguration("default");
         generateDependencyDiagramsTask.setOutput(project.getBuildDir().toPath().resolve("graph.md").toFile());
         generateDependencyDiagramsTask.setDiagramGenerator(new MermaidDiagramGenerator());
