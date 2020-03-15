@@ -113,11 +113,11 @@ IntegTest Gradle 6:
       - .gradle
       - subprojects/**/build
 
-.Deploy to plugin portal:
+Deploy to plugin portal:
   extends: .deploy template
   script: ./gradlew publishPlugins -Pgradle.publish.key="$PLUGIN_PORTAL_KEY" -Pgradle.publish.secret="$PLUGIN_PORTAL_SECRET" -s
 
-.Deploy to Bintray:
+Deploy to Bintray:
   extends: .deploy template
   script:
     - ./gradlew generatePomFileForMavenJavaPublication sourcesJar javadocJar
