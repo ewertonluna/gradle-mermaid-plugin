@@ -29,7 +29,7 @@ import org.gradle.api.tasks.Input;
 import org.gradle.api.tasks.OutputFile;
 import org.gradle.api.tasks.TaskAction;
 import org.zkovari.mermaid.internal.MermaidDiagramGenerator;
-import org.zkovari.mermaid.internal.MermaidPostGenerator;
+import org.zkovari.mermaid.internal.MermaidGeneratorPostAction;
 import org.zkovari.mermaid.internal.ProjectDependencyGraphBuilder;
 import org.zkovari.mermaid.internal.domain.DependencyNode;
 
@@ -37,7 +37,7 @@ public class GenerateMermaidDependenciesDiagram extends DefaultTask {
 
     private String configuration;
     private File output;
-    private List<MermaidPostGenerator> postGenerators;
+    private List<MermaidGeneratorPostAction> postGenerators;
 
     public GenerateMermaidDependenciesDiagram() {
         postGenerators = new ArrayList<>();
@@ -67,7 +67,7 @@ public class GenerateMermaidDependenciesDiagram extends DefaultTask {
         this.output = output;
     }
 
-    public boolean addPostGenerator(MermaidPostGenerator arg0) {
+    public boolean addPostGenerator(MermaidGeneratorPostAction arg0) {
         return postGenerators.add(arg0);
     }
 
@@ -86,16 +86,15 @@ public class GenerateMermaidDependenciesDiagram extends DefaultTask {
             }
         }
 
-        write(getOutput(), allRootNodes);
+        String mermaidDiagramString = diagramGenerator.generate(allRootNodes);
+        write(getOutput(), mermaidDiagramString);
 
-        postGenerators.forEach(postGenerator -> postGenerator.generate(getProject(), allRootNodes));
+        postGenerators.forEach(postGenerator -> postGenerator.run(getProject(), allRootNodes, mermaidDiagramString));
     }
 
-    private void write(File location, List<DependencyNode> rootNodes) {
-        String mermaidGraphString = diagramGenerator.generate(rootNodes);
-
+    private void write(File location, String mermaidDiagramString) {
         try {
-            Files.write(location.toPath(), mermaidGraphString.getBytes());
+            Files.write(location.toPath(), mermaidDiagramString.getBytes());
         } catch (IOException ex) {
             throw new GradleException(ex.getMessage(), ex);
         }

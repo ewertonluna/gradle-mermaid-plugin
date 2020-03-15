@@ -97,11 +97,9 @@ include 'project-b'
             }
         """
 
-        List<String> expectedLines = """```mermaid
-graph TD;
+        List<String> expectedLines = """graph TD;
   test-project-->junit;
   junit-->hamcrest-core;
-```
 """.readLines()
 
         when:
@@ -109,7 +107,7 @@ graph TD;
 
         then:
         assert result.task(":generateMermaidDependenciesDiagram").outcome == TaskOutcome.SUCCESS
-        File diagramFile = new File(testProjectDir.root, "build/graph.md")
+        File diagramFile = new File(testProjectDir.root, "build/mermaid/dependencies.mmd")
         assert diagramFile.exists()
         List<String> actualLines = diagramFile.readLines()
         assert actualLines == expectedLines
@@ -124,11 +122,9 @@ graph TD;
             }
         """
 
-        List<String> expectedLines = """```mermaid
-graph TD;
+        List<String> expectedLines = """graph TD;
   test-project-->junit;
   junit-->hamcrest-core;
-```
 """.readLines()
 
         when:
@@ -136,7 +132,7 @@ graph TD;
 
         then:
         assert result.task(":generateMermaidDependenciesDiagram").outcome == TaskOutcome.SUCCESS
-        File diagramFile = new File(testProjectDir.root, "build/graph.md")
+        File diagramFile = new File(testProjectDir.root, "build/mermaid/dependencies.mmd")
         assert diagramFile.exists()
         List<String> actualLines = diagramFile.readLines()
         assert actualLines == expectedLines
@@ -157,8 +153,7 @@ graph TD;
             }
         """
 
-        List<String> expectedLines = """```mermaid
-graph TD;
+        List<String> expectedLines = """graph TD;
   project-a-->project-b;
   project-b-->httpclient;
   httpclient-->httpcore;
@@ -166,7 +161,6 @@ graph TD;
   httpclient-->commons-codec;
   project-a-->junit;
   junit-->hamcrest-core;
-```
 """.readLines()
 
         when:
@@ -174,7 +168,7 @@ graph TD;
 
         then:
         assert result.task(":generateMermaidDependenciesDiagram").outcome == TaskOutcome.SUCCESS
-        File diagramFile = new File(testProjectDir.root, "build/graph.md")
+        File diagramFile = new File(testProjectDir.root, "build/mermaid/dependencies.mmd")
         assert diagramFile.exists()
         List<String> actualLines = diagramFile.readLines()
         assert actualLines == expectedLines

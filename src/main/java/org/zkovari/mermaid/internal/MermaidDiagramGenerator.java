@@ -24,12 +24,10 @@ public class MermaidDiagramGenerator {
     private static final String NEW_LINE = System.lineSeparator();
 
     public String generate(List<DependencyNode> rootNodes) {
-        StringBuilder stringBuilder = new StringBuilder("```mermaid").append(NEW_LINE).append("graph TD;")
-                .append(NEW_LINE);
+        StringBuilder stringBuilder = new StringBuilder("graph TD;").append(NEW_LINE);
         for (DependencyNode rootNode : rootNodes) {
             appendEdges(rootNode, stringBuilder);
         }
-        stringBuilder.append("```");
         return stringBuilder.toString();
     }
 

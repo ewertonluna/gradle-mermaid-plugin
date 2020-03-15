@@ -29,7 +29,8 @@ public class MermaidGenerationPlugin implements Plugin<Project> {
         GenerateMermaidDependenciesDiagram generateDependencyDiagramsTask = project.getTasks()
                 .create(GENERATE_MERMAID_DEPENDENCIES_DIAGRAM_TASK_NAME, GenerateMermaidDependenciesDiagram.class);
         generateDependencyDiagramsTask.setConfiguration("default");
-        generateDependencyDiagramsTask.setOutput(project.getBuildDir().toPath().resolve("graph.md").toFile());
+        generateDependencyDiagramsTask
+                .setOutput(project.getBuildDir().toPath().resolve("mermaid/dependencies.mmd").toFile());
         generateDependencyDiagramsTask.setDiagramGenerator(new MermaidDiagramGenerator());
     }
 

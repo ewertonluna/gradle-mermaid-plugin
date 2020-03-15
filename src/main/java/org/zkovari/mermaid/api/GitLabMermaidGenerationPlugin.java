@@ -21,7 +21,7 @@ import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.Task;
 import org.zkovari.mermaid.api.tasks.GenerateMermaidDependenciesDiagram;
-import org.zkovari.mermaid.internal.GitLabMermaidPostGenerator;
+import org.zkovari.mermaid.internal.GitLabMermaidGeneratorPostAction;
 
 public class GitLabMermaidGenerationPlugin implements Plugin<Project> {
 
@@ -33,7 +33,7 @@ public class GitLabMermaidGenerationPlugin implements Plugin<Project> {
         Task generateMermaidDependenciesDiagramTask = project.getTasks()
                 .getByName(GENERATE_MERMAID_DEPENDENCIES_DIAGRAM_TASK_NAME);
         ((GenerateMermaidDependenciesDiagram) generateMermaidDependenciesDiagramTask)
-                .addPostGenerator(new GitLabMermaidPostGenerator());
+                .addPostGenerator(new GitLabMermaidGeneratorPostAction());
     }
 
 }

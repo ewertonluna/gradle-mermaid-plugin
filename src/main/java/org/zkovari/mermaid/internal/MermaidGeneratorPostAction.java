@@ -20,8 +20,8 @@ import java.util.Collection;
 import org.gradle.api.Project;
 import org.zkovari.mermaid.internal.domain.DependencyNode;
 
-public interface MermaidPostGenerator {
+public interface MermaidGeneratorPostAction {
 
-    void generate(Project project, Collection<DependencyNode> rootNodes);
+    void run(Project project, Collection<DependencyNode> rootNodes, String mermaidDiagram);
 
 }
