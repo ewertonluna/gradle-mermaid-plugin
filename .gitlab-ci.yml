@@ -1,13 +1,15 @@
 include:
-  - remote: 'https://gitlab.com/zkovari/gitlab-ci-templates/raw/master/java/gradle/base.yml'
-  - remote: 'https://gitlab.com/zkovari/gitlab-ci-templates/raw/master/code-quality.yml'
+  - project: 'zkovari/gitlab-ci-templates'
+    file: 'java/gradle/base.yml'
+  - project: 'zkovari/gitlab-ci-templates'
+    file: 'code-quality.yml'
 
 .latest gradle job template:
   image: gradle:latest
   allow_failure: true
 
 .integTest job template:
-  extends: .test job template
+  extends: .test template
   stage: integTest
   needs: [Build]
   script:
@@ -18,7 +20,7 @@ Build:
 
 Build with latest Gradle:
   extends:
-    - .build job template
+    - .build template
     - .latest gradle job template
   script: gradle assemble -s
 
@@ -27,7 +29,7 @@ Test:
 
 Test with latest Gradle:
   extends:
-   - .test job template
+   - .test template
    - .latest gradle job template
   needs: [Build with latest Gradle]
   script:
