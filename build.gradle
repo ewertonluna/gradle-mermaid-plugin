@@ -111,11 +111,7 @@ task createTestkitFiles {
 test.dependsOn createTestkitFiles
 
 
-pluginBundle {
-    website = '$vcsUrl'
-    vcsUrl = '$vcsUrl'
-    tags = ['mermaid', 'graph', 'generation', 'dependency graph']
-}
+
 
 gradlePlugin {
     plugins {
@@ -146,6 +142,12 @@ task javadocJar(type: Jar) {
 }
 
 String vcsUrl = 'https://gitlab.com/zkovari/gradle-mermaid-plugin'
+
+pluginBundle {
+    website = "$vcsUrl"
+    vcsUrl = "$vcsUrl"
+    tags = ['mermaid', 'graph', 'generation', 'dependency graph']
+}
 
 publishing {
     publications {
