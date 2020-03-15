@@ -158,7 +158,7 @@ publishing {
                 project.afterEvaluate {
                     description = project.description
                 }
-                url = "$vcsUrl"
+                url = 'https://gitlab.com/zkovari/gradle-mermaid-plugin'
                 licenses {
                     license {
                         name = 'The Apache License, Version 2.0'
