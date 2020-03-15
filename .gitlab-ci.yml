@@ -106,12 +106,7 @@ IntegTest Gradle 6:
   when: manual
   only:
     - /^release/.*$/
-  cache:
-    key: "$CI_COMMIT_REF_NAME"
-    policy: pull
-    paths:
-      - .gradle
-      - subprojects/**/build
+  needs: [Build]
 
 Deploy to plugin portal:
   extends: .deploy template
