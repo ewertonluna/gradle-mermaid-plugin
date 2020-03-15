@@ -1,40 +1,6 @@
-image: java:8-jdk
-
 include:
-  - template: Code-Quality.gitlab-ci.yml
-
-variables:
-  GRADLE_OPTS: "-Dorg.gradle.daemon=false"
-
-before_script:
-  - export GRADLE_USER_HOME=`pwd`/.gradle
-
-stages:
- - build
- - test
- - integTest
- - systemTest
- - deploy
- - postDeploy
-
-.base job template:
-  except:
-    - tags
-
-.build job template:
-  extends: .base job template
-  stage: build
-  artifacts:
-    paths:
-      - .gradle
-      - build/
-
-.test job template:
-  extends: .base job template
-  stage: test
-  artifacts:
-    reports:
-      junit: build/test-results/**/TEST-*.xml
+  - remote: 'https://gitlab.com/zkovari/gitlab-ci-templates/raw/master/java/gradle/base.yml'
+  - remote: 'https://gitlab.com/zkovari/gitlab-ci-templates/raw/master/code-quality.yml'
 
 .latest gradle job template:
   image: gradle:latest
@@ -48,8 +14,7 @@ stages:
     - ./gradlew test --tests *FunctionalTest*
 
 Build:
-  extends: .build job template
-  script: ./gradlew assemble -s
+  extends: .single project build template
 
 Build with latest Gradle:
   extends:
@@ -58,14 +23,7 @@ Build with latest Gradle:
   script: gradle assemble -s
 
 Test:
-  extends: .test job template
-  needs: [Build]
-  script:
-    - ./gradlew check jacocoTestReport
-    - bash <(curl -s https://codecov.io/bash)
-  artifacts:
-    reports:
-      junit: build/test-results/**/TEST-*.xml
+  extends: .single project test template
 
 Test with latest Gradle:
   extends:
@@ -77,9 +35,6 @@ Test with latest Gradle:
   artifacts:
     reports:
       junit: build/test-results/**/TEST-*.xml
-
-code_quality:
-  needs: []
 
 IntegTest Gradle 3:
   extends: .integTest job template
@@ -101,20 +56,8 @@ IntegTest Gradle 6:
   variables:
     GRADLE_VERSION_FOR_SYSTEM_TESTS: "6.0"
 
-.deploy template:
-  stage: deploy
-  when: manual
-  only:
-    - /^release/.*$/
-  needs: [Build]
-  allow_failure: false
-
 Deploy to plugin portal:
-  extends: .deploy template
-  script: ./gradlew publishPlugins -Pgradle.publish.key="$PLUGIN_PORTAL_KEY" -Pgradle.publish.secret="$PLUGIN_PORTAL_SECRET" -s
+  extends: .deploy to plugin portal template
 
 Deploy to Bintray:
-  extends: .deploy template
-  script:
-    - ./gradlew generatePomFileForMavenJavaPublication sourcesJar javadocJar
-    - ./gradlew bintrayUpload
+  extends: .deploy to Bintray template
