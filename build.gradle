@@ -111,8 +111,6 @@ task createTestkitFiles {
 test.dependsOn createTestkitFiles
 
 
-
-
 gradlePlugin {
     plugins {
         mermaid {
@@ -141,11 +139,9 @@ task javadocJar(type: Jar) {
     archiveClassifier = 'javadoc'
 }
 
-String vcsUrl = 'https://gitlab.com/zkovari/gradle-mermaid-plugin'
-
 pluginBundle {
-    website = "$vcsUrl"
-    vcsUrl = "$vcsUrl"
+    website = 'https://gitlab.com/zkovari/gradle-mermaid-plugin'
+    vcsUrl = 'https://gitlab.com/zkovari/gradle-mermaid-plugin'
     tags = ['mermaid', 'graph', 'generation', 'dependency graph']
 }
 
@@ -178,7 +174,7 @@ publishing {
                 }
                 
                 scm {
-                    url = "$vcsUrl"
+                    url = 'https://gitlab.com/zkovari/gradle-mermaid-plugin'
                 }
             }
         }
@@ -194,7 +190,7 @@ bintray {
         name = project.name
         userOrg = 'zkovari'
         licenses = ['Apache-2.0']
-        vcsUrl = "$vcsUrl"
+        vcsUrl = 'https://gitlab.com/zkovari/gradle-mermaid-plugin'
         version {
             name = project.version
             desc = project.description
