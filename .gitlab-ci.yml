@@ -107,6 +107,7 @@ IntegTest Gradle 6:
   only:
     - /^release/.*$/
   needs: [Build]
+  allow_failure: false
 
 Deploy to plugin portal:
   extends: .deploy template
