@@ -40,7 +40,16 @@ public class MermaidDiagramGenerator {
     }
 
     private String toMermaidEdge(DependencyNode rootNode, DependencyNode dependencyNode) {
-        return "  " + rootNode.getGavc().getArtifactId() + "-->" + dependencyNode.getGavc().getArtifactId() + ";";
+        String artifactId = rootNode.getGavc().getArtifactId();
+        String version = rootNode.getGavc().getVersion();
+        String dependencyNodeArtifactId = dependencyNode.getGavc().getArtifactId();
+        String dependencyNodeVersion = dependencyNode.getGavc().getVersion();
+        String from = String.format("%s(%s<br>%s)", artifactId, artifactId, version);
+        String to = String.format("%s(%s<br>%s)",
+                dependencyNodeArtifactId,
+                dependencyNodeArtifactId,
+                dependencyNodeVersion);
+        return "  " + from  + "-->" + to + ";";
     }
 
 }

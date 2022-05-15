@@ -10,8 +10,8 @@ buildscript {
 
     dependencies {
         classpath 'com.adarshr:gradle-test-logger-plugin:2.0.0'
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.+'
-        classpath 'org.zkovari.changelog:changelog-automation-gradle-plugin:0.+'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.5'
+//        classpath 'org.zkovari.changelog:changelog-automation-gradle-plugin:0.+'
     }
 }
 
@@ -28,7 +28,7 @@ plugins {
 
 apply plugin: 'com.adarshr.test-logger'
 apply plugin: 'com.jfrog.bintray'
-apply plugin: "org.zkovari.changelog"
+//apply plugin: "org.zkovari.changelog"
 
 
 configurations {
