@@ -33,8 +33,10 @@ public class MermaidDiagramGenerator {
 
     private void appendEdges(DependencyNode parentNode, StringBuilder stringBuilder) {
         for (DependencyNode childNode : parentNode.getOutgoing()) {
-            stringBuilder.append(toMermaidEdge(parentNode, childNode));
-            stringBuilder.append(NEW_LINE);
+            if (stringBuilder.indexOf(toMermaidEdge(parentNode, childNode)) == -1) {
+                stringBuilder.append(toMermaidEdge(parentNode, childNode));
+                stringBuilder.append(NEW_LINE);
+            }
             appendEdges(childNode, stringBuilder);
         }
     }
