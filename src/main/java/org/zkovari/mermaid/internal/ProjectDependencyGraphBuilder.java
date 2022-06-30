@@ -61,11 +61,11 @@ public class ProjectDependencyGraphBuilder {
     private void addOutgoingNodesRecursively(ImmutableDependencyNode.Builder parentNodeBuilder,
             ResolvedDependency resolvedDependency, Set<Gavc> visitedNodes) {
         ImmutableGavc gavc = toGavc(resolvedDependency);
-        if (visitedNodes.contains(gavc)) {
-            return;
-        } else {
-            visitedNodes.add(gavc);
-        }
+//        if (visitedNodes.contains(gavc)) {
+//            return;
+//        } else {
+//            visitedNodes.add(gavc);
+//        }
         Builder nodeBuilder = ImmutableDependencyNode.builder().gavc(gavc);
         resolvedDependency.getChildren()
                 .forEach(child -> addOutgoingNodesRecursively(nodeBuilder, child, visitedNodes));
